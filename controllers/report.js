@@ -6,6 +6,7 @@ import streamifier from "streamifier"
 
 export async function submitReport(req, res) {
   try {
+    console.log("Report Submission Request Body:", req.body)
     //  Get session
     const session = await auth.api.getSession({
       headers: fromNodeHeaders(req.headers),
