@@ -16,6 +16,14 @@ async function initAuth() {
     emailAndPassword: {
       enabled: true,
     },
+    // ✅ ADD THIS (CRITICAL)
+    cookies: {
+      secure: true,
+      sameSite: "none",
+    },
+
+    // ✅ ADD THIS
+    trustHost: true,
   });
 
   console.log("🔐 Better Auth initialized");
