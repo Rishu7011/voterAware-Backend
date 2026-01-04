@@ -9,12 +9,14 @@ import { sendWelcomeEmail } from "../nodemailer/index.js"
 export async function signUpUser(req, res) {
   try {
     const { email, password, name } = req.body;
+    console.log("SignUp Request Body:", req.body);
 
     const response = await auth.api.signUpEmail({
       body: { email, password, name },
       headers: fromNodeHeaders(req.headers),
       asResponse: true,
     });
+    console.log("SignUp Response Status:", response.status);
 
     // forward cookie if present
     response.headers.forEach((value, key) => {
@@ -65,6 +67,7 @@ export async function signInUser(req, res) {
     });
 
     const data = await response.json();
+    console.log("SignIn Response Status:", data);
     return res.status(response.status).json(data);
   } catch (err) {
     console.error("SignIn Error:", err);
