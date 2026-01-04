@@ -12,16 +12,18 @@ dotenv.config();
 
 const app = express();
 
+
+// ✅ REQUIRED for Vercel
+app.set("trust proxy", 1);
+
 // ✅ CORS
 app.use(
   cors({
-    origin: [
-      "http://localhost:8081",
-      "http://192.168.1.5:8081",
-    ],
+    origin: true, // allow all origins (mobile-safe)
     credentials: true,
   })
 );
+
 
 // ✅ JSON
 app.use(express.json());
