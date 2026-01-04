@@ -11,21 +11,22 @@ import reportRoutes from "./routes/report.routes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// ✅ CORS (ONLY ONCE)
-app.use(cors({
-  origin: [
-    "http://localhost:8081",
-    "http://192.168.1.5:8081",
-  ],
-  credentials: true,
-}));
+// ✅ CORS
+app.use(
+  cors({
+    origin: [
+      "http://localhost:8081",
+      "http://192.168.1.5:8081",
+    ],
+    credentials: true,
+  })
+);
 
-// ✅ JSON FIRST
+// ✅ JSON
 app.use(express.json());
 
-// ✅ DB
+// ✅ DB (important: runs once per cold start)
 await connectMongoose();
 
 // ✅ Better Auth
@@ -38,7 +39,5 @@ app.post("/auth/signup", signUpUser);
 app.post("/auth/signin", signInUser);
 app.post("/auth/signout", signOutUser);
 
-// ✅ Server
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running on http://192.168.1.5:${PORT}`);
-});
+// ✅ EXPORT (instead of listen)
+export default app;
