@@ -2,16 +2,17 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { initAuth, auth } from "./betterAuth/auth.js";
-import { toNodeHandler } from "better-auth/node";
+import { fromNodeHeaders } from "better-auth/node";
 import { connectMongoose } from "./config/mongoose.js";
 
 import { signUpUser, signInUser, signOutUser } from "./controllers/auth.js";
+
 import reportRoutes from "./routes/report.routes.js";
 
 dotenv.config();
 
-const app = express();
 
+const app = express();
 
 // ✅ REQUIRED for Vercel
 app.set("trust proxy", 1);
@@ -33,13 +34,30 @@ await connectMongoose();
 
 // ✅ Better Auth
 await initAuth();
-app.use("/api/auth", toNodeHandler(auth));
 
-// ✅ Routes
-app.use(reportRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Server Started 🚀🚀🚀🚀");
+});
 app.post("/auth/signup", signUpUser);
 app.post("/auth/signin", signInUser);
 app.post("/auth/signout", signOutUser);
 
-// ✅ EXPORT (instead of listen)
+// Protected route (Expo)
+app.get("/api/me", async (req, res) => {
+ 	const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+    console.log("Session:", {session});
+	return res.json(session);
+});
+
+app.use(reportRoutes);
+
+// // ✅ EXPORT (instead of listen)
 export default app;
+
+
+
+
+
