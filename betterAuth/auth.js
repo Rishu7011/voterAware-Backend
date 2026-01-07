@@ -16,6 +16,12 @@ async function initAuth() {
     emailAndPassword: {
       enabled: true,
     },
+
+    session: {
+      expiresIn: 60 * 60 * 24 * 7,      // 1 week
+      updateAge: 0,            
+      disableSessionRefresh: true,
+    },
     // ✅ ADD THIS (CRITICAL)
     cookies: {
       secure: true,
